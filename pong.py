@@ -17,7 +17,9 @@ class Paddle():
 
 class Ball():
 
-    def __init__(self, start_position = [0,0], start_direction = [2,2], size = 7):
+    def __init__(self, screen, start_position = [0,0], start_direction = [2,2], size = 7):
+        self.screen = screen
+        self.size = size        
         self.position = start_position
         self.direction = start_direction 
     
@@ -25,6 +27,15 @@ class Ball():
         self.position[0] += self.direction[0]
         self.position[1] += self.direction[1]
     
+    def draw(self, ball_color):
+        pygame.draw.circle(self.screen, ball_color, (self.position[0], self.position[1]), self.size)
+    
+    def check_collision(self):
+        width, height = self.screen.get_size()
+        if self.position[0] - self.size <= 0 or self.position[0] + self.size >= width:
+            self.direction[0]*=-1
+        if self.position[1] - self.size <= 0 or self.position[1] + self.size >= height:
+            self.direction[1]*=-1
 
 
 def main():
@@ -39,29 +50,25 @@ def main():
     WINDOW = pygame.display.set_mode((WIDTH,HEIGHT))
     pygame.display.set_caption("Pong")
     WINDOW.fill(BLACK)
-
+    screen = pygame.display.set_mode(SIZE)
 
     ball_start = [WIDTH/2, HEIGHT/2]
     ball_size = 7
-    ball = Ball(start_position = ball_start)
+    ball = Ball(screen, start_position = ball_start)
     paddle = Paddle()
 
-    screen = pygame.display.set_mode(SIZE)
+
 
     while True:
         start = time.time_ns()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
-        if ball.position[0] - ball_size <= 0 or ball.position[0] + ball_size >= WIDTH:
-            ball.direction[0]*=-1
-        if ball.position[1] - ball_size <= 0 or ball.position[1] + ball_size >= HEIGHT:
-            ball.direction[1]*=-1
+        ball.check_collision()
         ball.move()
-        print(ball.direction, ball.position)
 
         screen.fill(BLACK)
-        pygame.draw.circle(screen, WHITE, (ball.position[0], ball.position[1]), ball_size)
+        ball.draw(WHITE)
         pygame.display.flip()
 
         frame_time = time.time_ns() - start
