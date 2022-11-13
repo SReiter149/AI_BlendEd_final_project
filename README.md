@@ -1,1 +1,1 @@
-# AI_BlendEd_final_project
+# An AI that plays pong
