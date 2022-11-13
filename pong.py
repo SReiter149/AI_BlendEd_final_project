@@ -9,7 +9,7 @@ import time
 
 class Paddle():
 
-    def __init__(self, screen, start_position, start_direction = [0,3], paddle_size = (4, 28)):
+    def __init__(self, screen, start_position, start_direction = [0,3], paddle_size = (2, 28)):
         self.screen = screen
         self.position = start_position
         self.direction = start_direction
@@ -31,7 +31,7 @@ class Paddle():
 
 class Ball():
 
-    def __init__(self, screen, start_position, start_direction = [2,2], size = 7):
+    def __init__(self, screen, start_position, start_direction = [-2,2], size = 6):
         self.screen = screen
         self.size = size        
         self.position = start_position
@@ -44,12 +44,16 @@ class Ball():
     def draw(self, color):
         pygame.draw.circle(self.screen, color, (self.position[0], self.position[1]), self.size)
     
-    def check_collision(self):
+    def check_collision(self, paddle1, paddle2 = None):
         width, height = self.screen.get_size()
         if self.position[0] - self.size <= 0 or self.position[0] + self.size >= width:
             self.direction[0]*=-1
         if self.position[1] - self.size <= 0 or self.position[1] + self.size >= height:
             self.direction[1]*=-1
+        if self.position[0] - self.size == paddle1.position[0]:
+            if (self.position[1] < paddle1.position[1] + paddle1.size[1]) and (self.position[1] > paddle1.position[1]):
+                if self.direction[0] < 0:
+                    self.direction[0] *= -1
 
 def main():
     pygame.init()
@@ -68,7 +72,7 @@ def main():
     ball_start = [WIDTH/2, HEIGHT/2]
     ball_size = 7
     ball = Ball(screen, start_position = ball_start)
-    paddle = Paddle(screen, start_position = [30,0])
+    paddle = Paddle(screen, start_position = [30,0], paddle_size = [4, 28])
 
 
 
@@ -81,7 +85,7 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP: paddle.move_up()
                 if event.key == pygame.K_DOWN: paddle.move_down()
-        ball.check_collision()
+        ball.check_collision(paddle)
         ball.move()
         paddle.move()
 
