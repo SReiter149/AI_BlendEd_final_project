@@ -9,7 +9,7 @@ import time
 
 class Paddle():
 
-    def __init__(self, screen, start_position, start_direction = [0,3], paddle_size = (4, 28)):
+    def __init__(self, screen, start_position, start_direction = [0,3], paddle_size = (2, 28)):
         self.screen = screen
         self.position = start_position
         self.direction = start_direction
@@ -31,7 +31,7 @@ class Paddle():
 
 class Ball():
 
-    def __init__(self, screen, start_position, start_direction = [2,2], size = 7):
+    def __init__(self, screen, start_position, start_direction = [-2,2], size = 6):
         self.screen = screen
         self.size = size        
         self.position = start_position
@@ -44,12 +44,17 @@ class Ball():
     def draw(self, color):
         pygame.draw.circle(self.screen, color, (self.position[0], self.position[1]), self.size)
     
-    def check_collision(self):
+    def check_collision(self, paddles):
         width, height = self.screen.get_size()
         if self.position[0] - self.size <= 0 or self.position[0] + self.size >= width:
             self.direction[0]*=-1
         if self.position[1] - self.size <= 0 or self.position[1] + self.size >= height:
             self.direction[1]*=-1
+        for paddle in paddles:
+            if self.position[0] - self.size == paddle.position[0]:
+                if (self.position[1] < paddle.position[1] + paddle.size[1]) and (self.position[1] > paddle.position[1]):
+                    # if self.direction[0] < 0:
+                    self.direction[0] *= -1
 
 def main():
     pygame.init()
@@ -68,10 +73,8 @@ def main():
     ball_start = [WIDTH/2, HEIGHT/2]
     ball_size = 7
     ball = Ball(screen, start_position = ball_start)
-    paddle = Paddle(screen, start_position = [30,0])
-
-
-
+    paddle1 = Paddle(screen, start_position = [30,0], paddle_size = [4, 28])
+    paddle2 = Paddle(screen, start_position = [WIDTH - 30,0], paddle_size = [4, 28])
 
     while True:
         start = time.time_ns()
@@ -79,20 +82,27 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP: paddle.move_up()
-                if event.key == pygame.K_DOWN: paddle.move_down()
-        ball.check_collision()
+                if event.key == pygame.K_UP: 
+                    paddle1.move_up()
+                    paddle2.move_up()
+                if event.key == pygame.K_DOWN: 
+                    paddle1.move_down()
+                    paddle2.move_down()
+
+        ball.check_collision([paddle1, paddle2])
         ball.move()
-        paddle.move()
+        paddle1.move()
+        paddle2.move()
 
         screen.fill(BLACK)
 
         ball.draw(WHITE)
-        paddle.draw(WHITE)
+        paddle1.draw(WHITE)
+        paddle2.draw(WHITE)
         pygame.display.flip()
 
         frame_time = time.time_ns() - start
         time.sleep((max(FPS - frame_time,0)) * 10**-9)
         
-
-main()
+if __name__ == "__main__":
+    main()
