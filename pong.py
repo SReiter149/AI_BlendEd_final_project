@@ -5,6 +5,12 @@ import sys
 import time
 
 
+WHITE = (255,255,255)
+BLACK = (0,0,0)
+SPEED = [2,2]
+FPS = (1/60) * 10**9
+PADDLE_SPEED = 1
+SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 512, 256
 
 
 class Paddle():
@@ -18,16 +24,14 @@ class Paddle():
     def draw(self, color):
         pygame.draw.rect(self.screen, color, (self.position[0], self.position[1], self.size[0], self.size[1]))
 
-    def move(self):
-        self.position[1] += self.direction[1]
     
     def move_up(self):
-        if self.direction[1] > 0:
-            self.direction[1] *= -1
+        if self.position[1] >= 0:
+            self.position[1] -= PADDLE_SPEED
 
     def move_down(self):
-        if self.direction[1] < 0:
-            self.direction[1] *= -1
+        if self.position[1] + self.size[1] <= SCREEN_HEIGHT:
+            self.position[1] += PADDLE_SPEED
 
 class Ball():
 
@@ -59,22 +63,16 @@ class Ball():
 def main():
     pygame.init()
 
-    WHITE = (255,255,255)
-    BLACK = (0,0,0)
-    SPEED = [2,2]
-    FPS = (1/60) * 10**9
-
-    SIZE = WIDTH, HEIGHT = 512, 256
-    WINDOW = pygame.display.set_mode((WIDTH,HEIGHT))
+    WINDOW = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
     pygame.display.set_caption("Pong")
     WINDOW.fill(BLACK)
-    screen = pygame.display.set_mode(SIZE)
+    screen = pygame.display.set_mode(SCREEN_SIZE)
 
-    ball_start = [WIDTH/2, HEIGHT/2]
+    ball_start = [SCREEN_WIDTH/2, SCREEN_HEIGHT/2]
     ball_size = 7
-    ball = Ball(screen, start_position = ball_start)
+    ball = Ball(screen, start_position = ball_start, size=ball_size)
     paddle1 = Paddle(screen, start_position = [30,0], paddle_size = [4, 28])
-    paddle2 = Paddle(screen, start_position = [WIDTH - 30,0], paddle_size = [4, 28])
+    paddle2 = Paddle(screen, start_position = [SCREEN_WIDTH - 30,0], paddle_size = [4, 28])
 
     while True:
         start = time.time_ns()
@@ -82,17 +80,18 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP: 
+                if event.key == pygame.K_w:
                     paddle1.move_up()
+                if event.key == pygame.K_s:
+                    paddle1.move_down()
+                if event.key == pygame.K_UP: 
                     paddle2.move_up()
                 if event.key == pygame.K_DOWN: 
-                    paddle1.move_down()
                     paddle2.move_down()
+
 
         ball.check_collision([paddle1, paddle2])
         ball.move()
-        paddle1.move()
-        paddle2.move()
 
         screen.fill(BLACK)
 
