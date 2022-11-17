@@ -12,6 +12,7 @@ SPEED = [2, 2]
 FPS = (1 / 60) * 10**9
 PADDLE_SPEED = 2
 PADDLE_SIZE = [2, 56]
+PADDLE_OFFSET = 30
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 512, 256
 
 
@@ -58,16 +59,16 @@ class Ball:
 
     def check_collision(self, paddles):
         width, height = self.screen.get_size()
-        if self.position[0] - self.size <= 0 or self.position[0] + self.size >= width:
+        if self.position[0] <= self.size or self.position[0] + self.size >= width:
             self.direction[0] *= -1
-        if self.position[1] - self.size <= 0 or self.position[1] + self.size >= height:
+        if self.position[1] <= self.size or self.position[1] + self.size >= height:
             self.direction[1] *= -1
         for paddle in paddles:
             if (
-                self.position[1] <= paddle.position[1] + paddle.size[1]
-                and self.position[1] >= paddle.position[1]
-                and self.position[0] <= paddle.position[0] + paddle.size[0]
-                and self.position[0] >= paddle.position[0]
+                self.position[1] - self.size <= paddle.position[1] + paddle.size[1]
+                and self.position[1] + self.size >= paddle.position[1]
+                and self.position[0] - self.size <= paddle.position[0] + paddle.size[0]
+                and self.position[0] + self.size >= paddle.position[0]
             ):
                 self.direction[0] *= -1
 
@@ -85,9 +86,11 @@ def main():
     ball_start = [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2]
     ball_size = 7
     ball = Ball(screen, start_position=ball_start, size=ball_size)
-    paddle1 = Paddle(screen, start_position=[30, 0], paddle_size=PADDLE_SIZE)
+    paddle1 = Paddle(screen, start_position=[PADDLE_OFFSET, 0], paddle_size=PADDLE_SIZE)
     paddle2 = Paddle(
-        screen, start_position=[SCREEN_WIDTH - 30, 0], paddle_size=PADDLE_SIZE
+        screen,
+        start_position=[SCREEN_WIDTH - PADDLE_OFFSET, 0],
+        paddle_size=PADDLE_SIZE,
     )
 
     while True:
