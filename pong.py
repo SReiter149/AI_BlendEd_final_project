@@ -9,7 +9,7 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 SPEED = [2,2]
 FPS = (1/60) * 10**9
-PADDLE_SPEED = 1
+PADDLE_SPEED = 2
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = 512, 256
 
 
@@ -68,6 +68,8 @@ def main():
     WINDOW.fill(BLACK)
     screen = pygame.display.set_mode(SCREEN_SIZE)
 
+    pygame.key.set_repeat(1)
+
     ball_start = [SCREEN_WIDTH/2, SCREEN_HEIGHT/2]
     ball_size = 7
     ball = Ball(screen, start_position = ball_start, size=ball_size)
@@ -76,18 +78,19 @@ def main():
 
     while True:
         start = time.time_ns()
+        keys = pygame.key.get_pressed()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_w:
-                    paddle1.move_up()
-                if event.key == pygame.K_s:
-                    paddle1.move_down()
-                if event.key == pygame.K_UP: 
-                    paddle2.move_up()
-                if event.key == pygame.K_DOWN: 
-                    paddle2.move_down()
+
+        if keys[pygame.K_w]:
+            paddle1.move_up()
+        if keys[pygame.K_s]:
+            paddle1.move_down()
+        if keys[pygame.K_UP]:
+            paddle2.move_up()
+        if keys[pygame.K_DOWN]:
+            paddle2.move_down()
 
 
         ball.check_collision([paddle1, paddle2])
