@@ -57,20 +57,24 @@ class Ball:
             self.screen, color, (self.position[0], self.position[1]), self.size
         )
 
-    def check_collision(self, paddles):
+    def check_collision_wall(self):
         width, height = self.screen.get_size()
-        if self.position[0] <= self.size or self.position[0] + self.size >= width:
+        if self.position[0] <= self.size or self.position[0] + self.size >= width: #collision with sides
             self.direction[0] *= -1
-        if self.position[1] <= self.size or self.position[1] + self.size >= height:
+            return True
+        if self.position[1] <= self.size or self.position[1] + self.size >= height: #collision with top/bottom
             self.direction[1] *= -1
-        for paddle in paddles:
-            if (
-                self.position[1] - self.size <= paddle.position[1] + paddle.size[1]
-                and self.position[1] + self.size >= paddle.position[1]
-                and self.position[0] - self.size <= paddle.position[0] + paddle.size[0]
-                and self.position[0] + self.size >= paddle.position[0]
-            ):
-                self.direction[0] *= -1
+        return False
+    def check_collision_paddle(self, paddle):
+        if (
+            self.position[1] - self.size <= paddle.position[1] + paddle.size[1]
+            and self.position[1] + self.size >= paddle.position[1]
+            and self.position[0] - self.size <= paddle.position[0] + paddle.size[0]
+            and self.position[0] + self.size >= paddle.position[0]
+        ):
+            self.direction[0] *= -1
+            return True
+        return False
 
 
 def main():
@@ -80,6 +84,7 @@ def main():
     pygame.display.set_caption("Pong")
     WINDOW.fill(BLACK)
     screen = pygame.display.set_mode(SCREEN_SIZE)
+    FONT = pygame.font.SysFont(None, 24)
 
     pygame.key.set_repeat(1)
 
@@ -92,7 +97,7 @@ def main():
         start_position=[SCREEN_WIDTH - PADDLE_OFFSET, 0],
         paddle_size=PADDLE_SIZE,
     )
-
+    scores = [0,0] #player1, then player2
     while True:
         start = time.time_ns()
         keys = pygame.key.get_pressed()
@@ -109,12 +114,17 @@ def main():
             paddle2.move_up()
         if keys[pygame.K_DOWN]:
             paddle2.move_down()
-
-        ball.check_collision([paddle1, paddle2])
+        if ball.check_collision_wall():
+            sys.exit()
+        if ball.check_collision_paddle(paddle1): scores[0] += 1
+        if ball.check_collision_paddle(paddle2): scores[1] += 1
         ball.move()
+        score1_image = FONT.render(str(scores[0]), True, WHITE)
+        score2_image = FONT.render(str(scores[1]), True, WHITE)
 
         screen.fill(BLACK)
-
+        screen.blit(score1_image, (20,20))
+        screen.blit(score2_image, (SCREEN_WIDTH - 20, 20))
         ball.draw(WHITE)
         paddle1.draw(WHITE)
         paddle2.draw(WHITE)
