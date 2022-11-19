@@ -3,7 +3,6 @@
 import pygame
 import sys
 import time
-import math
 
 
 WHITE = (255, 255, 255)
