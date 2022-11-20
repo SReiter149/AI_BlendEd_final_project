@@ -3,6 +3,7 @@
 import pygame
 import sys
 import time
+import math
 
 
 WHITE = (255, 255, 255)
@@ -58,11 +59,11 @@ class Ball:
 
     def check_collision_wall(self):
         width, height = self.screen.get_size()
-        if (
-            self.position[0] <= self.size or self.position[0] + self.size >= width
-        ):  # collision with sides
+        if self.position[0] <= self.size:  # collision with sides
             self.direction[0] *= -1
             return True
+        if self.position[0] + self.size >= width:
+            self.direction[0] *= -1
         if (
             self.position[1] <= self.size or self.position[1] + self.size >= height
         ):  # collision with top/bottom
@@ -95,13 +96,8 @@ def main():
     ball_start = [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2]
     ball_size = 7
     ball = Ball(screen, start_position=ball_start, size=ball_size)
-    paddle1 = Paddle(screen, start_position=[PADDLE_OFFSET, 0], paddle_size=PADDLE_SIZE)
-    paddle2 = Paddle(
-        screen,
-        start_position=[SCREEN_WIDTH - PADDLE_OFFSET, 0],
-        paddle_size=PADDLE_SIZE,
-    )
-    scores = [0, 0]  # player1, then player2
+    paddle = Paddle(screen, start_position=[PADDLE_OFFSET, 0], paddle_size=PADDLE_SIZE)
+    score = 0  # player1, then player2
     while True:
         start = time.time_ns()
         keys = pygame.key.get_pressed()
@@ -111,29 +107,20 @@ def main():
                 sys.exit()
 
         if keys[pygame.K_w]:
-            paddle1.move_up()
+            paddle.move_up()
         if keys[pygame.K_s]:
-            paddle1.move_down()
-        if keys[pygame.K_UP]:
-            paddle2.move_up()
-        if keys[pygame.K_DOWN]:
-            paddle2.move_down()
+            paddle.move_down()
         if ball.check_collision_wall():
-            sys.exit()
-        if ball.check_collision_paddle(paddle1):
-            scores[0] += 1
-        if ball.check_collision_paddle(paddle2):
-            scores[1] += 1
+            score -= 1
+        if ball.check_collision_paddle(paddle):
+            score += 1
         ball.move()
-        score1_image = FONT.render(str(scores[0]), True, WHITE)
-        score2_image = FONT.render(str(scores[1]), True, WHITE)
+        score_image = FONT.render(str(score), True, WHITE)
 
         screen.fill(BLACK)
-        screen.blit(score1_image, (20, 20))
-        screen.blit(score2_image, (SCREEN_WIDTH - 20, 20))
+        screen.blit(score_image, (20, 20))
         ball.draw(WHITE)
-        paddle1.draw(WHITE)
-        paddle2.draw(WHITE)
+        paddle.draw(WHITE)
         pygame.display.flip()
 
         frame_time = time.time_ns() - start
