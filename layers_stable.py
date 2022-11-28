@@ -60,3 +60,4 @@ class Drop_Out_Layer:
     def back_prop(self, dloss, LR=None):
         dloss = np.multiply(dloss, self.mask) / self.keep_prob
         return dloss
+    

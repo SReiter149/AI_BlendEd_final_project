@@ -38,3 +38,6 @@ def cross_entropy(y_train, outputs):
     loss = -np.sum(x) / y_train.shape[1]
     dloss = (y_train - outputs) / y_train.shape[1]
     return loss, dloss
+
+def pong_loss(state):
+    pass
