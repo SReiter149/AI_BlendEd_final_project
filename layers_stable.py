@@ -13,10 +13,14 @@ class FC_Layer:
         if self.bias_true == True:
             self.bias = np.random.randn(1, shape[1]) * 0.2
 
+        print(self.weights.shape, f"bshape is {self.bias.shape}")
+
     def forward_prop(self, input, test=False):
         self.input = input
-        self.output = np.dot(self.input, self.weights)  # (150,4), (4,1), out = (150,1)
-        print(self.weights.shape)
+        #self.output = np.swapaxes(np.matmul(self.input, self.weights), 1, 0)
+        self.output = np.array([np.matmul(self.input, self.weights)])
+        print(f"weights is {self.weights.shape}, dot shape: {self.output.shape}, input is {self.input.shape}")# (150,4), (4,1), out = (150,1)
+
         if self.bias_true:
             self.output += self.bias
         return self.output
