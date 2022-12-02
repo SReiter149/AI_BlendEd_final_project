@@ -101,9 +101,10 @@ class game:
         self.paddle2 = Paddle(
             self.screen,
             start_position=[self.SCREEN_WIDTH - self.PADDLE_OFFSET, 0],
-            paddle_size=self.PADDLE_SIZE,
+            paddle_size=[self.PADDLE_SIZE[0], self.PADDLE_SIZE[1]*200],
         )
         self.scores = [0, 0]  # player1, then player2
+        #self.score = 0
 
     def human_play_frame(self):
         start = time.time_ns()
@@ -124,16 +125,16 @@ class game:
         if self.ball.check_collision_wall():
             self.GAME_OVER = True
         if self.ball.check_collision_paddle(self.paddle1):
-            self.scores[0] += 1
+            self.score += 1
         if self.ball.check_collision_paddle(self.paddle2):
             self.scores[1] += 1
         self.ball.move()
-        score1_image = self.FONT.render(str(self.scores[0]), True, self.WHITE)
-        score2_image = self.FONT.render(str(self.scores[1]), True, self.WHITE)
+        score1_image = self.FONT.render(str(self.score), True, self.WHITE)
+        #score2_image = self.FONT.render(str(self.scores[1]), True, self.WHITE)
 
         self.screen.fill(self.BLACK)
         self.screen.blit(score1_image, (20, 20))
-        self.screen.blit(score2_image, (self.SCREEN_WIDTH - 20, 20))
+        #self.screen.blit(score2_image, (self.SCREEN_WIDTH - 20, 20))
         self.ball.draw(self.WHITE)
         self.paddle1.draw(self.WHITE)
         self.paddle2.draw(self.WHITE)
@@ -142,7 +143,10 @@ class game:
         frame_time = time.time_ns() - start
         time.sleep((max(self.FPS - frame_time, 0)) * 10**-9)        
 
-    def machine_play_frame(self, p1_move, p2_move, view = True):
+    def machine_play_frame(self, 
+                           p1_move, 
+                           p2_move, 
+                           view = True):
         #True = move up
         #False = move down
         start = time.time_ns()
@@ -195,12 +199,13 @@ class game:
         self.BALL_SIZE = 7
         self.ball = Ball(self.screen, start_position=self.BALL_START, size=self.BALL_SIZE)
         self.paddle1 = Paddle(self.screen, start_position=[self.PADDLE_OFFSET, 0], paddle_size=self.PADDLE_SIZE)
-        self.paddle2 = Paddle(
-            self.screen,
-            start_position=[self.SCREEN_WIDTH - self.PADDLE_OFFSET, 0],
-            paddle_size=self.PADDLE_SIZE,
-        )
+        #self.paddle2 = Paddle(
+        #    self.screen,
+        #    start_position=[self.SCREEN_WIDTH - self.PADDLE_OFFSET, 0],
+        #    paddle_size=self.PADDLE_SIZE,
+        #)
         self.scores = [0, 0]  # player1, then player2
+        #self.score = 0
 def main():
     pong = game()
     while True:
