@@ -185,7 +185,8 @@ class game:
     def get_state(self):
         #please check these because there is a good chance I made a mistake
         #I want these numbers to be the same if the positions are the same but flipped for each paddle
-        state1 = [self.paddle1.position[0], self.paddle1.position[1], self.ball.position[0], self.ball.position[1], self.ball.direction[0], self.ball.direction[1]]
+        #[paddle y, paddle x, ball y, ball x, ball direction y, ball direction x]
+        state1 = [self.paddle1.position[0] - self.PADDLE_SIZE[0] /2, self.paddle1.position[1] - self.PADDLE_SIZE[1]/ 2, self.ball.position[0] - self.BALL_SIZE/2, self.ball.position[1] - self.BALL_SIZE/2, self.ball.direction[0], self.ball.direction[1]]
         state2 = [self.paddle1.position[0], self.paddle1.position[1], self.SCREEN_WIDTH - self.ball.position[0], self.SCREEN_HEIGHT - self.ball.position[1], -1 * self.ball.direction[0], self.ball.direction[1]]      
         return self.GAME_OVER, state1, state2
     
@@ -201,6 +202,7 @@ class game:
             paddle_size=self.PADDLE_SIZE,
         )
         self.scores = [0, 0]  # player1, then player2
+
 def main():
     pong = game()
     while True:
