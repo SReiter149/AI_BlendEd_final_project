@@ -1,4 +1,5 @@
 import numpy as np
+from math import log10 as log
 
 # activation functions
 def sigmoid(x, deriv=False):
@@ -40,4 +41,8 @@ def cross_entropy(y_train, outputs):
     return loss, dloss
 
 def pong_loss(state):
-    pass
+    #[paddle x, paddle y, ball x, ball y, ball direction x, ball direction y]
+    loss = (abs(state[1]**2 - state[3]**2)) ** 0.5 / abs(state[0] - state[2]) ** 0.5
+    dloss = state[1] / ((abs(state[0] - state[2]) ** 0.5) * (abs(state[1] ** 2 - state[3] ** 2) ** 0.5))
+    print(state)
+    return loss, dloss
