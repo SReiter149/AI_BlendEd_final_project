@@ -44,8 +44,8 @@ class agent:
             self.agent1.Qloss(state1)
             self.agent1.back_prop(state1) 
             
-            self.agent2.Qloss(state2)
-            self.agent2.back_prop(state2)  #should update based on the reward
+            #self.agent2.Qloss(state2)
+            #self.agent2.back_prop(state2)  #should update based on the reward
             if game_over:
                 self.game.reset()
 
