@@ -13,7 +13,7 @@ class FC_Layer:
         if self.bias_true == True:
             self.bias = np.random.randn(shape[1]) * 0.2
 
-        print(self.weights.shape, f"bshape is {self.bias.shape}")
+        #print(self.weights.shape, f"bshape is {self.bias.shape}")
 
     def forward_prop(self, input, test=False):
         self.input = input

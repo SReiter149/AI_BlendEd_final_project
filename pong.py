@@ -4,6 +4,7 @@ import pygame
 import sys
 import time
 
+
 class Paddle:
     def __init__(
         self, screen, start_position, start_direction=[0, 3], paddle_size=(2, 28), paddle_speed = 2
@@ -213,8 +214,6 @@ def main():
         while not pong.GAME_OVER:
             pong.human_play_frame()
         pong.reset()
-
-
 
 if __name__ == "__main__":
     main()
