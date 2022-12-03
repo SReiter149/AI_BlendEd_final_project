@@ -47,32 +47,34 @@ class Ball:
             self.screen, color, (self.position[0], self.position[1]), self.size
         )
 
-    def check_collision_wall(self):
-        width, height = self.screen.get_size()
-        if (
-            self.position[0] <= self.size or self.position[0] + self.size >= width
-        ):  # collision with sides
-            self.direction[0] *= -1
-            return True
-        if (
-            self.position[1] <= self.size or self.position[1] + self.size >= height
-        ):  # collision with top/bottom
-            self.direction[1] *= -1
-        return False
+    def check_collision(self, paddles):
+        _, height = self.screen.get_size()
+        i = 1
 
-    def check_collision_paddle(self, paddle):
-        if (
-            self.position[1] - self.size <= paddle.position[1] + paddle.size[1]
-            and self.position[1] + self.size >= paddle.position[1]
-            and self.position[0] - self.size <= paddle.position[0] + paddle.size[0]
-            and self.position[0] + self.size >= paddle.position[0]
-        ):
-            self.direction[0] *= -1
-            return True
-        return False
+
+        for paddle in paddles:
+
+            if self.position[0] - self.size <= paddle.position[0] and self.position[0] + self.size >= paddle.position[0]:
+                if (
+                    self.position[1] - self.size <= paddle.position[1] + paddle.size[1]
+                    and self.position[1] + self.size >= paddle.position[1]
+                ):
+                    self.direction[0] *= -1
+                    if i == 1:
+                        return True, False
+                    else:
+                        return False, True
+                else:
+                    return True, True
+            i *= -1
+
+        if (self.position[1] <= self.size or self.position[1] + self.size >= height):
+            self.direction[1] *= -1# * self.direction[1]
+        return False, False
 
     
 class game:
+
 
     def __init__(self, ):       
         self.WHITE = (255, 255, 255)
@@ -123,14 +125,15 @@ class game:
             self.paddle2.move_up()
         if keys[pygame.K_DOWN]:
             self.paddle2.move_down()
-        if self.ball.check_collision_wall():
+        collision = self.ball.check_collision((self.paddle1, self.paddle2))
+        if collision[0] and collision[1]:
             self.GAME_OVER = True
-        if self.ball.check_collision_paddle(self.paddle1):
-            self.score += 1
-        if self.ball.check_collision_paddle(self.paddle2):
+        if collision[0] and not collision[1]:
+            self.scores[0] += 1
+        if  collision[1] and not collision[0]:
             self.scores[1] += 1
         self.ball.move()
-        score1_image = self.FONT.render(str(self.score), True, self.WHITE)
+        score1_image = self.FONT.render(str(self.scores[0]), True, self.WHITE)
         #score2_image = self.FONT.render(str(self.scores[1]), True, self.WHITE)
 
         self.screen.fill(self.BLACK)
@@ -166,11 +169,13 @@ class game:
         else:
             self.paddle2.move_down()
 
-        if self.ball.check_collision_wall():
+        if self.ball.check_collision(self.paddle1)[0]:
             self.GAME_OVER = True
-        if self.ball.check_collision_paddle(self.paddle1):
+        if self.ball.check_collision(self.paddle2)[0]:
+            self.GAME_OVER = True
+        if self.ball.check_collision(self.paddle1)[1]:
             self.scores[0] += 1
-        if self.ball.check_collision_paddle(self.paddle2):
+        if self.ball.check_collision(self.paddle2)[1]:
             self.scores[1] += 1
         self.ball.move()
         if view:
