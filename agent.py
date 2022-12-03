@@ -42,10 +42,10 @@ class agent:
             self.game.machine_play_frame(self.move1, self.move2)  # will update the game based on the move
             game_over, state1, state2 = self.game.get_state() # gets the new state based on the move
             self.agent1.Qloss(state1)
-            self.agent1.back_prop(state1) 
+            self.agent1.Qback_prop(state1) 
             
-            self.agent2.Qloss(state2)
-            self.agent2.back_prop(state2)  #should update based on the reward
+            # self.agent2.Qloss(state2)
+            # self.agent2.back_prop(state2)  #should update based on the reward
             if game_over:
                 self.game.reset()
 

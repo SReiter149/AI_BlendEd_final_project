@@ -11,7 +11,7 @@ class FC_Layer:
         self.weights = np.random.randn(shape[0], shape[1]) * 0.2
         self.bias_true = bias_true
         if self.bias_true == True:
-            self.bias = np.random.randn(1, shape[1]) * 0.2
+            self.bias = np.random.randn(shape[1]) * 0.2
 
         print(self.weights.shape, f"bshape is {self.bias.shape}")
 
@@ -19,25 +19,24 @@ class FC_Layer:
         self.input = input
         #self.output = np.swapaxes(np.matmul(self.input, self.weights), 1, 0)
         self.output = np.array([np.matmul(self.input, self.weights)])
-        print(f"weights is {self.weights.shape}, dot shape: {self.output.shape}, input is {self.input.shape}")# (150,4), (4,1), out = (150,1)
+        # print(f"weights is {self.weights.shape}, dot shape: {self.output.shape}, input is {self.input.shape}, bias is {self.bias.shape}")# (150,4), (4,1), out = (150,1)
 
         if self.bias_true:
-            self.output += self.bias
+            self.output = np.add(self.output, self.bias)
+        # print(f"weights is {self.weights.shape}, dot shape: {self.output.shape}, input is {self.input.shape}, output is {self.output.shape}")# (150,4), (4,1), out = (150,1)
         return self.output
 
     def back_prop(self, dloss, LR=0.01):
-        print(self.input.shape)
         self.input = self.input.reshape(-1,1)
         dloss = np.array([dloss])
         dloss = dloss.reshape(1,-1)
         temp = np.dot(self.input, dloss)
-        print(self.weights.shape)
         self.weights += temp
         if self.bias_true:
-            self.bias += LR * np.sum(
+            self.bias = np.add(np.sum( #add LR back here, took it out bc its a matrix not a scalar for some reason
                 dloss, axis=0, keepdims=True
-            )  # mess with sum vs mean here
-        dloss = np.dot(dloss, self.weights.T)  # ????? is this line nessessary?
+            ), self.bias)  # mess with sum vs mean here
+        dloss = np.dot(dloss, self.weights.T)  
         return dloss
 
 
