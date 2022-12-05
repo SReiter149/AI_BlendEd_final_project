@@ -18,7 +18,7 @@ class FC_Layer:
     def forward_prop(self, input, test=False):
         self.input = input
         #self.output = np.swapaxes(np.matmul(self.input, self.weights), 1, 0)
-        self.output = np.array([np.matmul(self.input, self.weights)])
+        self.output = np.array(np.matmul(self.input, self.weights))
         # print(f"weights is {self.weights.shape}, dot shape: {self.output.shape}, input is {self.input.shape}, bias is {self.bias.shape}")# (150,4), (4,1), out = (150,1)
 
         if self.bias_true:
@@ -28,10 +28,8 @@ class FC_Layer:
 
     def back_prop(self, dloss, LR=0.01):
         self.input = self.input.reshape(-1,1)
-        dloss = np.array([dloss])
-        dloss = dloss.reshape(1,-1)
-        temp = np.dot(self.input, dloss)
-        self.weights += temp
+        dloss = np.array(dloss).reshape(1,-1) 
+        self.weights +=np.dot(self.input, dloss)
         if self.bias_true:
             self.bias = np.add(np.sum( #add LR back here, took it out bc its a matrix not a scalar for some reason
                 dloss, axis=0, keepdims=True

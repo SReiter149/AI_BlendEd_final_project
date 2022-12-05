@@ -5,6 +5,7 @@ import sys
 import time
 
 
+
 class Paddle:
     def __init__(
         self, screen, start_position, start_direction=[0, 3], paddle_size=(2, 28), paddle_speed = 2
@@ -50,9 +51,7 @@ class Ball:
     def check_collision(self, paddles):
         _, height = self.screen.get_size()
         i = 1
-
-
-        for paddle in paddles:
+        for num, paddle in enumerate(paddles):
 
             if self.position[0] - self.size <= paddle.position[0] and self.position[0] + self.size >= paddle.position[0]:
                 if (
@@ -61,11 +60,11 @@ class Ball:
                 ):
                     self.direction[0] *= -1
                     if i == 1:
-                        return True, False
+                        return False, False
                     else:
-                        return False, True
+                        return False, num
                 else:
-                    return True, True
+                    return True, num
             i *= -1
 
         if (self.position[1] <= self.size or self.position[1] + self.size >= height):
@@ -125,7 +124,7 @@ class game:
             self.paddle2.move_up()
         if keys[pygame.K_DOWN]:
             self.paddle2.move_down()
-        collision = self.ball.check_collision((self.paddle1, self.paddle2))
+        collision = self.ball.check_collision([self.paddle1, self.paddle2])
         if collision[0] and collision[1]:
             self.GAME_OVER = True
         if collision[0] and not collision[1]:
@@ -169,14 +168,12 @@ class game:
         else:
             self.paddle2.move_down()
 
-        if self.ball.check_collision(self.paddle1)[0]:
+        collision = self.ball.check_collision([self.paddle1, self.paddle2])
+        if collision[0]:
             self.GAME_OVER = True
-        if self.ball.check_collision(self.paddle2)[0]:
-            self.GAME_OVER = True
-        if self.ball.check_collision(self.paddle1)[1]:
-            self.scores[0] += 1
-        if self.ball.check_collision(self.paddle2)[1]:
-            self.scores[1] += 1
+        if collision[1] != False:
+            self.scores[collision[1]] += 1
+
         self.ball.move()
         if view:
             score1_image = self.FONT.render(str(self.scores[0]), True, self.WHITE)
