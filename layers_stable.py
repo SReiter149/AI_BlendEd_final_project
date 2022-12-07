@@ -3,6 +3,7 @@ import sys
 
 # sys.path.append(path)
 import numpy as np
+print(f"seed is {np.random.get_state()[1][0]}")
 from functions_stable import *
 
 

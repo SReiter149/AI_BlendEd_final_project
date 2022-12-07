@@ -75,7 +75,7 @@ class Ball:
 class game:
 
 
-    def __init__(self, ):       
+    def __init__(self, view = True):       
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
         self.SPEED = [2, 2]
@@ -85,7 +85,7 @@ class game:
         self.PADDLE_OFFSET = 30
         self.SCREEN_SIZE = self.SCREEN_WIDTH, self.SCREEN_HEIGHT = 512, 256
         self.GAME_OVER = False
-
+        self.view = view
         pygame.init()
 
         self.WINDOW = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
@@ -148,24 +148,21 @@ class game:
 
     def machine_play_frame(self, 
                            p1_move, 
-                           p2_move, 
-                           view = True):
+                           p2_move, ):
         #True = move up
         #False = move down
-        start = time.time_ns()
-        keys = pygame.key.get_pressed()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        if p1_move:
+        if p1_move == 1:
             self.paddle1.move_up()
-        else:
+        elif p1_move == -1:
             self.paddle1.move_down()
-        if p2_move:
+        if p2_move == 1:
             self.paddle2.move_up()
-        else:
+        elif p2_move == 2:
             self.paddle2.move_down()
 
         collision = self.ball.check_collision([self.paddle1, self.paddle2])
@@ -175,7 +172,7 @@ class game:
             self.scores[collision[1]] += 1
 
         self.ball.move()
-        if view:
+        if self.view:
             score1_image = self.FONT.render(str(self.scores[0]), True, self.WHITE)
             score2_image = self.FONT.render(str(self.scores[1]), True, self.WHITE)
 
@@ -187,8 +184,6 @@ class game:
             self.paddle2.draw(self.WHITE)
             pygame.display.flip()
 
-            frame_time = time.time_ns() - start
-            time.sleep((max(self.FPS - frame_time, 0)) * 10**-9)   
     def get_state(self):
         #please check these because there is a good chance I made a mistake
         #I want these numbers to be the same if the positions are the same but flipped for each paddle
