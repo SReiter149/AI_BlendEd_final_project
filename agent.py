@@ -15,6 +15,7 @@ class agent:
         self.move1 = False #down
         self.move2 = True #up
         self.avg_losses = []
+        self.num_frames = []
         self.frame_number = []
         self.fig, self.ax = plt.subplots()
         self.games = 0
@@ -25,13 +26,13 @@ class agent:
         self.game_over, self.state1, self.state2 = self.game.get_state()
     def set_up(self):
         self.agent1 = Network(pong_loss)
-        self.agent1.add(FC_Layer((6,128), bias_true=False))
-        self.agent1.add(Activation_Layer())
-        self.agent1.add(FC_Layer((128,32), bias_true=False))
-        self.agent1.add(Activation_Layer())
-        self.agent1.add(FC_Layer((32,12), bias_true=False))
-        self.agent1.add(Activation_Layer())
-        self.agent1.add(FC_Layer((12,1), bias_true=False))
+        self.agent1.add(FC_Layer((6,64), bias_true=False))
+        self.agent1.add(Activation_Layer(tanh))
+        self.agent1.add(FC_Layer((64,32), bias_true=False))
+        self.agent1.add(Activation_Layer(tanh))
+        self.agent1.add(FC_Layer((32,10), bias_true=False))
+        self.agent1.add(Activation_Layer(tanh))
+        self.agent1.add(FC_Layer((10,1), bias_true=False))
         self.agent1.add(Activation_Layer(tanh))
 
         #self.agent2 = Network(pong_loss)
@@ -54,10 +55,10 @@ class agent:
   
 
     def main(self):
-        moves = 0
+        frames = 0
         training = []
         while True:
-            moves += 1
+            frames += 1
             losses = []
             self.get_action(self.state1, self.state2)
             self.game.machine_play_frame(self.move1, self.move2)  # will update the game based on the move
@@ -67,25 +68,28 @@ class agent:
             
             # self.agent2.Qloss(state2)
             # self.agent2.back_prop(state2)  #should update based on the reward
-            if moves > 200:
+            if frames > 200:
                 self.game.view = True
             if self.game_over:
                 for train in training:
                     state = train[0].copy()
-                    state.append(moves)
+                    state.append(frames)
                     self.agent1.Qloss(state,train[1])
                     losses.append(abs(self.agent1.loss))
                     self.agent1.Qback_prop(self.agent1.loss) 
                 training = []
-                print(moves, len(self.avg_losses))
-                moves = 0
-                self.games += 1
+                
 
-                self.avg_losses.append(sum(losses)/len(losses))
+                self.games += 1
+                self.num_frames.append(frames)
+                frames = 0
+                self.avg_losses.append(sum(losses)/len(losses) * 1000)
                 if self.games % 100 == 0:
                     temp =self.avg_losses[-100:]
                     plt.close()
                     plt.plot(self.avg_losses)
+
+                    plt.plot(self.num_frames)
                     plt.show(block = False)
 
                     if self.games % 500 == 0:

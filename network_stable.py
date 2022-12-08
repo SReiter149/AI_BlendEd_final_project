@@ -27,9 +27,11 @@ class Network:
     def Qloss(self, state, move):
         self.loss, self.dloss = self.loss_func(state, move)
 
+
     def Qback_prop(self, LR = 0.01):
         for layer in reversed(self.layers):
-            self.dloss = layer.back_prop(self.dloss, LR)
+            self.dloss = layer.back_prop(self.dloss)
+
 
     def Qtrain(self, x_train, y_train, x_test, y_test, epochs=25_000, LR=0.01):
         self.train_loss = []

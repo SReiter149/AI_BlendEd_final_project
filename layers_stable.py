@@ -29,13 +29,16 @@ class FC_Layer:
 
     def back_prop(self, dloss, LR=0.01):
         self.input = self.input.reshape(-1,1)
-        dloss = np.array(dloss).reshape(1,-1) 
-        self.weights +=np.dot(self.input, dloss)
+        dloss = np.array(dloss).reshape(-1,1)
+        # print(self.weights.shape, dloss.shape, self.input.shape)
+        self.weights +=np.dot(self.input, dloss.T)
         if self.bias_true:
             self.bias = np.add(np.sum( #add LR back here, took it out bc its a matrix not a scalar for some reason
                 dloss, axis=0, keepdims=True
             ), self.bias)  # mess with sum vs mean here
-        dloss = np.dot(dloss, self.weights.T)  
+
+        dloss = np.dot(self.weights,dloss)
+        # print(self.weights.shape, dloss.shape, self.input.shape)  
         return dloss
 
 
@@ -49,8 +52,11 @@ class Activation_Layer:
         return output
 
     def back_prop(self, dloss, LR=None):
-        return dloss * self.activation(self.input, deriv=True)
+        temp = self.activation(self.input, deriv=True).reshape(-1,1)
 
+        output = np.multiply(temp, dloss)
+
+        return  output
 
 class Drop_Out_Layer:
     def __init__(self, keep_prob=0.8):

@@ -42,12 +42,17 @@ def cross_entropy(y_train, outputs):
 
 def pong_loss(state, move):
     #[paddle x, paddle y, ball x, ball y, ball direction x, ball direction y, moves]
-    temp = state[1] - state[3]
-    loss = ((temp/abs(temp)) - move) #* 1000 / state[6]
-    dloss = [loss]
-    
+
+    temp =  abs(state[1] - state[3]) * 0.001
+    expected = (state[1] - state[3])//abs(state[1] - state[3])
+    if expected == move:
+        loss = -1 * temp
+    else:
+        loss = temp
+
+    dloss = np.array([loss])
+
     # print(" ")
     # print(f"dloss {dloss[0]}, state = {state}, move = {move}") 
-    #dloss = state[1] / ((abs(state[0] - state[2]) ** 0.5) * (abs(state[1] ** 2 - state[3] ** 2) ** 0.5))
-    # print(state)
+
     return loss, dloss

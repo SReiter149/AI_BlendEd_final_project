@@ -196,6 +196,7 @@ class game:
         self.GAME_OVER = False
         self.BALL_START = [self.SCREEN_WIDTH / 2, self.SCREEN_HEIGHT / 2]
         self.BALL_SIZE = 7
+        self.SPEED = [2, 2]
         self.ball = Ball(self.screen, start_position=self.BALL_START, size=self.BALL_SIZE)
         self.paddle1 = Paddle(self.screen, start_position=[self.PADDLE_OFFSET, 0], paddle_size=self.PADDLE_SIZE)
         #self.paddle2 = Paddle(
