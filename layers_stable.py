@@ -35,8 +35,9 @@ class FC_Layer:
         # print(dloss.T)
 
         #print(f"update: {np.dot(self.input, dloss.T).reshape(1,-1) * LR}")
-        self.weights -=np.dot(self.input, dloss.T) * LR
-        print(f"weights {self.weights.reshape(1,-1)}")
+        self.weights +=np.dot(self.input, dloss.T) * LR
+        # print(f"weights {self.weights.reshape(1,-1)}")
+        # print(f"update {np.dot(self.input, dloss.T) * LR}")
         if self.bias_true:
             self.bias = np.add(np.sum( #add LR back here, took it out bc its a matrix not a scalar for some reason
                 dloss, axis=0, keepdims=True

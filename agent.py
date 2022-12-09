@@ -27,7 +27,8 @@ class agent:
     def set_up(self):
         self.agent1 = Network(pong_loss)
 
-        self.agent1.add(FC_Layer((6,1), bias_true=False, activation = tanh))
+        self.agent1.add(FC_Layer((6,3), bias_true=False, activation = tanh))
+        self.agent1.add(FC_Layer((3,1), bias_true=False, activation = tanh))
         # self.agent1.add(Activation_Layer(tanh))
         #self.agent1.layers[0].weights = np.array([0,1,0,-1,0,0]).reshape(6,1)
 
@@ -39,7 +40,6 @@ class agent:
     def get_action(self, state1, state2):
         state1 = np.array(state1, dtype = float)
         prediction = self.agent1.forward_prop(state1)
-        #print(prediction.shape)
         # I don't remember making it 3 dimensional
         
         self.move1 = prediction[0]
@@ -55,7 +55,7 @@ class agent:
     def main(self):
         frames = 0
         training = []
-      
+        plot = False
         while True:
             """
           if (self.agent1.layers[0].weights != np.array([0,1,0,-1,0,0]).reshape(6,1)).all:
@@ -68,9 +68,9 @@ class agent:
             frames += 1            
             self.game_over, self.state1, self.state2 = self.game.get_state()
             self.get_action(self.state1, self.state2)
-            print(self.move1, self.state1[1] - self.state1[3])
             self.game.machine_play_frame(self.move1, self.move2)  # will update the game based on the move
              # gets the new state based on the move
+             
             training.append([self.state1, self.move1])
 
             
@@ -78,15 +78,19 @@ class agent:
             # self.agent2.back_prop(state2)  #should update based on the reward
             if frames > 200:
                 self.game.view = True
+                if plot ==False:
+                    plot = True
+                    plt.close()
+                    plt.plot(self.avg_losses)
+
+                    plt.plot(self.num_frames)
+                    plt.show(block = False)
             if self.game_over:
                 losses = []
                 for train in training:
-                    state = train[0].copy()
-                    state.append(frames)
-                    self.agent1.Qloss(state,train[1])
+                    self.agent1.Qloss(train[0],train[1])
                     losses.append(self.agent1.loss)
                     self.agent1.Qback_prop(self.agent1.loss) 
-                    # print(self.agent1.layers[0].weights)
                 training = []
                 
 

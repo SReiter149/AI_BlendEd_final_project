@@ -45,15 +45,14 @@ def pong_loss(state, move):
 
     temp =  abs(state[1] - state[3])
     expected = np.sign(state[1] - state[3])
+    move = np.sign(move)
     if expected == move:
-        loss = 1
+        loss = 0.1
     else:
-        loss = 0
+        loss = -0.01
 
     dloss = np.array([loss])
-    print("")
-    print(f"calculated dloss {dloss}")
-    # print(" ")
-    # print(f"dloss {dloss[0]}, state = {state}, move = {move}") 
+    # print("")
+    # print(f"calculated dloss {dloss}")
 
     return loss, dloss

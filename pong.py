@@ -151,7 +151,7 @@ class game:
                            p2_move, ):
         #True = move up
         #False = move down
-    
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -169,7 +169,7 @@ class game:
         if collision[0]:
             self.GAME_OVER = True
         if collision[1] != False:
-            self.scores[collision[1]] += 1
+            self.scores[collision[0]] += 1
 
         self.ball.move()
         if self.view:
