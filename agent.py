@@ -26,14 +26,10 @@ class agent:
         self.game_over, self.state1, self.state2 = self.game.get_state()
     def set_up(self):
         self.agent1 = Network(pong_loss)
-        self.agent1.add(FC_Layer((6,64), bias_true=False))
-        self.agent1.add(Activation_Layer(tanh))
-        self.agent1.add(FC_Layer((64,32), bias_true=False))
-        self.agent1.add(Activation_Layer(tanh))
-        self.agent1.add(FC_Layer((32,10), bias_true=False))
-        self.agent1.add(Activation_Layer(tanh))
-        self.agent1.add(FC_Layer((10,1), bias_true=False))
-        self.agent1.add(Activation_Layer(tanh))
+
+        self.agent1.add(FC_Layer((6,1), bias_true=False, activation = tanh))
+        # self.agent1.add(Activation_Layer(tanh))
+        #self.agent1.layers[0].weights = np.array([0,1,0,-1,0,0]).reshape(6,1)
 
         #self.agent2 = Network(pong_loss)
         #self.agent2.add(FC_Layer((6,24), bias_true=True))
@@ -45,24 +41,36 @@ class agent:
         prediction = self.agent1.forward_prop(state1)
         #print(prediction.shape)
         # I don't remember making it 3 dimensional
-        self.move1 = round(prediction[0])
+        
+        self.move1 = prediction[0]
+        #self.move1 = state1[1] - state1[3]
         
         #state2 = np.array(state1, dtype = float)
         #prediction = self.agent2.forward_prop(state2)
         #self.move2 = bool(round(prediction[0]))
-        self.move2 = round(sigmoid(round(prediction[0])))
+        self.move2 = 0
     
   
 
     def main(self):
         frames = 0
         training = []
+      
         while True:
-            frames += 1
-            losses = []
+            """
+          if (self.agent1.layers[0].weights != np.array([0,1,0,-1,0,0]).reshape(6,1)).all:
+                old_weights = self.agent1.layers[0].weights
+            if 300 - frames > self.games:
+                self.agent1.layers[0].weights = np.array([0,1,0,-1,0,0]).reshape(6,1)
+            else: 
+               self.agent1.layers[0].weights = old_weights
+                """
+            frames += 1            
+            self.game_over, self.state1, self.state2 = self.game.get_state()
             self.get_action(self.state1, self.state2)
+            print(self.move1, self.state1[1] - self.state1[3])
             self.game.machine_play_frame(self.move1, self.move2)  # will update the game based on the move
-            self.game_over, self.state1, self.state2 = self.game.get_state() # gets the new state based on the move
+             # gets the new state based on the move
             training.append([self.state1, self.move1])
 
             
@@ -71,19 +79,21 @@ class agent:
             if frames > 200:
                 self.game.view = True
             if self.game_over:
+                losses = []
                 for train in training:
                     state = train[0].copy()
                     state.append(frames)
                     self.agent1.Qloss(state,train[1])
-                    losses.append(abs(self.agent1.loss))
+                    losses.append(self.agent1.loss)
                     self.agent1.Qback_prop(self.agent1.loss) 
+                    # print(self.agent1.layers[0].weights)
                 training = []
                 
 
                 self.games += 1
                 self.num_frames.append(frames)
                 frames = 0
-                self.avg_losses.append(sum(losses)/len(losses) * 1000)
+                self.avg_losses.append(sum(losses)/len(losses) * 100)
                 if self.games % 100 == 0:
                     temp =self.avg_losses[-100:]
                     plt.close()

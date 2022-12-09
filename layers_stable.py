@@ -3,6 +3,7 @@ import sys
 
 # sys.path.append(path)
 import numpy as np
+
 print(f"seed is {np.random.get_state()[1][0]}")
 from functions_stable import *
 
@@ -13,32 +14,34 @@ class FC_Layer:
         self.bias_true = bias_true
         if self.bias_true == True:
             self.bias = np.random.randn(shape[1]) * 0.2
+        self.activation = activation
+        print(self.activation)
 
-        #print(self.weights.shape, f"bshape is {self.bias.shape}")
 
     def forward_prop(self, input, test=False):
         self.input = input
-        #self.output = np.swapaxes(np.matmul(self.input, self.weights), 1, 0)
+       
         self.output = np.array(np.matmul(self.input, self.weights))
-        # print(f"weights is {self.weights.shape}, dot shape: {self.output.shape}, input is {self.input.shape}, bias is {self.bias.shape}")# (150,4), (4,1), out = (150,1)
-
+        
         if self.bias_true:
             self.output = np.add(self.output, self.bias)
-        # print(f"weights is {self.weights.shape}, dot shape: {self.output.shape}, input is {self.input.shape}, output is {self.output.shape}")# (150,4), (4,1), out = (150,1)
+        self.output = self.activation(self.output)
         return self.output
 
     def back_prop(self, dloss, LR=0.01):
         self.input = self.input.reshape(-1,1)
         dloss = np.array(dloss).reshape(-1,1)
-        # print(self.weights.shape, dloss.shape, self.input.shape)
-        self.weights +=np.dot(self.input, dloss.T)
+        dloss = np.multiply(dloss, self.activation(self.output, deriv = True).reshape(-1,1))
+        # print(dloss.T)
+
+        #print(f"update: {np.dot(self.input, dloss.T).reshape(1,-1) * LR}")
+        self.weights -=np.dot(self.input, dloss.T) * LR
+        print(f"weights {self.weights.reshape(1,-1)}")
         if self.bias_true:
             self.bias = np.add(np.sum( #add LR back here, took it out bc its a matrix not a scalar for some reason
                 dloss, axis=0, keepdims=True
             ), self.bias)  # mess with sum vs mean here
-
         dloss = np.dot(self.weights,dloss)
-        # print(self.weights.shape, dloss.shape, self.input.shape)  
         return dloss
 
 
@@ -52,6 +55,7 @@ class Activation_Layer:
         return output
 
     def back_prop(self, dloss, LR=None):
+        return dloss
         temp = self.activation(self.input, deriv=True).reshape(-1,1)
 
         output = np.multiply(temp, dloss)

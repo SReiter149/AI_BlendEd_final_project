@@ -99,7 +99,7 @@ class game:
         self.BALL_START = [self.SCREEN_WIDTH / 2, self.SCREEN_HEIGHT / 2]
         self.BALL_SIZE = 7
         self.ball = Ball(self.screen, start_position=self.BALL_START, size=self.BALL_SIZE)
-        self.paddle1 = Paddle(self.screen, start_position=[self.PADDLE_OFFSET, 0], paddle_size=self.PADDLE_SIZE)
+        self.paddle1 = Paddle(self.screen, start_position=[self.PADDLE_OFFSET, self.SCREEN_HEIGHT / 2], paddle_size=self.PADDLE_SIZE)
         self.paddle2 = Paddle(
             self.screen,
             start_position=[self.SCREEN_WIDTH - self.PADDLE_OFFSET, 0],
@@ -151,18 +151,18 @@ class game:
                            p2_move, ):
         #True = move up
         #False = move down
-
+    
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        if p1_move == 1:
+        if p1_move > 0:
             self.paddle1.move_up()
-        elif p1_move == -1:
+        else:
             self.paddle1.move_down()
-        if p2_move == 1:
+        if p2_move > 0:
             self.paddle2.move_up()
-        elif p2_move == 2:
+        else:
             self.paddle2.move_down()
 
         collision = self.ball.check_collision([self.paddle1, self.paddle2])
@@ -188,7 +188,7 @@ class game:
         #please check these because there is a good chance I made a mistake
         #I want these numbers to be the same if the positions are the same but flipped for each paddle
         #[paddle y, paddle x, ball y, ball x, ball direction y, ball direction x]
-        state1 = [self.paddle1.position[0] - self.PADDLE_SIZE[0] /2, self.paddle1.position[1] - self.PADDLE_SIZE[1]/ 2, self.ball.position[0] - self.BALL_SIZE/2, self.ball.position[1] - self.BALL_SIZE/2, self.ball.direction[0], self.ball.direction[1]]
+        state1 = [self.paddle1.position[0], self.paddle1.position[1], self.ball.position[0], self.ball.position[1], self.ball.direction[0], self.ball.direction[1]]
         state2 = [self.paddle1.position[0], self.paddle1.position[1], self.SCREEN_WIDTH - self.ball.position[0], self.SCREEN_HEIGHT - self.ball.position[1], -1 * self.ball.direction[0], self.ball.direction[1]]      
         return self.GAME_OVER, state1, state2
     
