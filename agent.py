@@ -77,12 +77,14 @@ class agent:
                 self.avg_losses.append(sum(losses) / len(losses) * 100)
 
                 # every 100th game displaying the plot
-                """if self.games % 100 == 0:
+                if self.games % 100 == 0:
                     plt.close()
-                    plt.plot(self.avg_losses)
-
-                    plt.plot(self.num_frames)
-                    plt.show(block = False)"""
+                    plt.title("Loss and # of Frames")
+                    plt.xlabel("Game #")
+                    plt.plot(self.num_frames, label="# of Frames")
+                    plt.plot(self.avg_losses, label="Avg of Losses")
+                    plt.show(block = False)
+                    plt.legend()
 
                 # resetting everything
                 self.game.view = False
@@ -91,4 +93,5 @@ class agent:
                 self.games += 1
                 frames = 0
                 limit_fps = False
+
                 self.game.reset()
