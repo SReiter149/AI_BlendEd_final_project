@@ -47,8 +47,10 @@ class agent:
         training = []
         losses = []
 
-        # we can run this for as long as we want
+        # setup fps limiter
         limit_fps = False
+
+        # we can run this for as long as we want
         while True:
             # each frame getting the state
             frames += 1
@@ -63,6 +65,7 @@ class agent:
 
             # if the game goes long enough, we want to see
             if frames > 2000:
+                # slow down the game
                 limit_fps = True
                 self.game.view = True
 
@@ -83,7 +86,7 @@ class agent:
                     plt.xlabel("Game #")
                     plt.plot(self.num_frames, label="# of Frames")
                     plt.plot(self.avg_losses, label="Avg of Losses")
-                    plt.show(block = False)
+                    plt.show(block=False)
                     plt.legend()
 
                 # resetting everything
