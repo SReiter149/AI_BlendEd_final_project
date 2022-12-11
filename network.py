@@ -1,39 +1,39 @@
-#importing nessessary files
+# importing nessessary files
 import numpy as np
 import matplotlib.pyplot as plt
 
 
 class Network:
-    #network class
+    # network class
     def __init__(self, loss_func):
-        #creating the network
+        # creating the network
         self.layers = []
         self.loss = None
         self.dloss = None
         self.loss_func = loss_func
 
     def add(self, layer):
-        #adding a layer to the network
+        # adding a layer to the network
         self.layers.append(layer)
 
     def forward_prop(self, inputs, test=False):
-        #calls the forward prop function of each layer
+        # calls the forward prop function of each layer
         for layer in self.layers:
             output = layer.forward_prop(inputs, test=test)
             inputs = output
         self.output = output
         return output
-    
+
     def Qloss(self, state, move):
-        #gets the loss
+        # gets the loss
         self.loss, self.dloss = self.loss_func(state, move)
 
-    def Qback_prop(self, LR = 0.01):
-        #back props through the whole netork
+    def Qback_prop(self, LR=0.01):
+        # back props through the whole netork
         for layer in reversed(self.layers):
             self.dloss = layer.back_prop(self.dloss)
 
-    #none of the following code is used in the agent, all of it is just here as failed attempts
+    # none of the following code is used in the agent, all of it is just here as failed attempts
     def Qtrain(self, x_train, y_train, x_test, y_test, epochs=25_000, LR=0.01):
         self.train_loss = []
         self.train_epoch = []
