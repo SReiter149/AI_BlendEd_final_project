@@ -4,7 +4,7 @@ from network import Network
 from functions import pong_loss, tanh
 import numpy as np
 from matplotlib import pyplot as plt
-
+plt.style.use('dark_background')
 
 class agent:
     # agent class to allow computer to interact with the game
