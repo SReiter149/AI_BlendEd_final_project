@@ -51,6 +51,7 @@ class agent:
         losses = []
 
         #we can run this for as long as we want
+        limit_fps = False
         while True:
             #each frame getting the state
             frames += 1            
@@ -58,13 +59,14 @@ class agent:
             #getting and playing the move
             self.game_over, self.state, _ = self.game.get_state()
             self.get_action(self.state)
-            self.game.machine_play_frame(self.move, 0) 
+            self.game.machine_play_frame(self.move, 0, limit_fps) 
             
             #adding the state/move to back_prop at the end of the game
             training.append([self.state, self.move])
 
             #if the game goes long enough, we want to see
-            if frames > 200:
+            if frames > 2000:
+                limit_fps = True
                 self.game.view = True
                 
             if self.game_over:
@@ -79,12 +81,12 @@ class agent:
                 self.avg_losses.append(sum(losses)/len(losses) * 100)
 
                 #every 100th game displaying the plot
-                if self.games % 100 == 0:
+                """if self.games % 100 == 0:
                     plt.close()
                     plt.plot(self.avg_losses)
 
                     plt.plot(self.num_frames)
-                    plt.show(block = False)
+                    plt.show(block = False)"""
 
                 #resetting everything
                 self.game.view = False
@@ -92,4 +94,5 @@ class agent:
                 training = []
                 self.games += 1                
                 frames = 0
+                limit_fps = False
                 self.game.reset()

@@ -87,7 +87,8 @@ class game:
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
         self.SPEED = [2, 2]
-        self.FPS = (1 / 60) * 10**9
+        # a big number
+        self.FPS = (1 / 144) * 10**9
         self.PADDLE_SPEED = 2
         self.PADDLE_SIZE = [2, 56]
         self.PADDLE_OFFSET = 30
@@ -170,7 +171,8 @@ class game:
         frame_time = time.time_ns() - start
         time.sleep((max(self.FPS - frame_time, 0)) * 10**-9)        
 
-    def machine_play_frame(self, p1_move, p2_move):
+    def machine_play_frame(self, p1_move, p2_move, limit_fps):
+        start = time.time_ns()
         """
         allow for the agent class to interact with the game
 
@@ -181,6 +183,9 @@ class game:
         #allow for human to exit the game
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                sys.exit()
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                pygame.quit()
                 sys.exit()
 
         #update paddles based on the move
@@ -219,6 +224,9 @@ class game:
             self.paddle1.draw(self.WHITE)
             self.paddle2.draw(self.WHITE)
             pygame.display.flip()
+        if limit_fps:
+            frame_time = time.time_ns() - start
+            time.sleep((max(self.FPS - frame_time, 0)) * 10**-9)        
 
     def get_state(self):
         """

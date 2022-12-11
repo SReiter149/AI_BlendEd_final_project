@@ -131,5 +131,5 @@ class flattening:
         self.shape = input.shape
         return input.reshape((input.shape[0], -1))
     
-    def back_prop():
+    def back_prop(self):
         pass
