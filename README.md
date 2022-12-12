@@ -28,6 +28,26 @@ python train.py
 ##### If you\'d like to play pong by yourself run
 ```bash
 python pong.py
+
+## File Descr.
+
+####agent.py
+Our RL agent which interacts with the game
+####functions.py
+Contains our loss function and  activation functions
+####layers.py
+Layers of our model
+####network.py
+Our network of layers
+####pong.py
+Code for the game pong
+####train.py
+
+##References Used
+This project was coded without machine learning libraries. Here are some resources used to achieve this.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLKM3Q3j59zpH7O0VQGFCvmW5ISlM0tys6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ```
 ## Next Steps
 - Integrate a proper reinforcement-learning algorithm.
