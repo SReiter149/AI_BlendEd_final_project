@@ -25,7 +25,7 @@ sudo pacman -S python-numpy python-pandas python-matplotlib python-pygame
 python train.py
 ```
 
-##### If you\'d like to play pong with a friend you can run
+##### If you\'d like to play pong by yourself run
 ```bash
 python pong.py
 ```
