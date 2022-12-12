@@ -46,9 +46,7 @@ Code for the game pong
 ## References Used
 This project was coded without machine learning libraries. Here are some resources used to achieve this.
 
-<p align="center">
-<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLKM3Q3j59zpH7O0VQGFCvmW5ISlM0tys6" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-</p>
+[![AI VIDEOS](https://i.ytimg.com/vi/IHZwWFHWa-w/maxresdefault.jpg)](https://youtube.com/playlist?list=PLKM3Q3j59zpH7O0VQGFCvmW5ISlM0tys6)
 
 ## Next Steps
 - Integrate a proper reinforcement-learning algorithm.
