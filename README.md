@@ -33,3 +33,4 @@ python pong.py
 - Integrate a proper reinforcement-learning algorithm.
 - Add a second AI to play against the first.
 - Use GPU acceleration.
+- Create binaries for different OSs so dependencies aren't needed
