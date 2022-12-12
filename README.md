@@ -31,19 +31,19 @@ python pong.py
 ```
 ## File Descr.
 
-####agent.py
+##### agent.py
 Our RL agent which interacts with the game
-####functions.py
+##### functions.py
 Contains our loss function and  activation functions
-####layers.py
+##### layers.py
 Layers of our model
-####network.py
+##### network.py
 Our network of layers
-####pong.py
+##### pong.py
 Code for the game pong
-####train.py
+##### train.py
 
-##References Used
+## References Used
 This project was coded without machine learning libraries. Here are some resources used to achieve this.
 
 <p align="center">
