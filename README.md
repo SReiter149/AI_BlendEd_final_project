@@ -44,7 +44,7 @@ Code for the game pong
 ##### train.py
 
 ## References Used
-This project was coded without machine learning libraries. Here are some resources used to achieve this.
+This project was coded without machine learning libraries. Here is a playlist of videos used to achieve this.
 
 [![AI VIDEOS](https://i.ytimg.com/vi/IHZwWFHWa-w/maxresdefault.jpg)](https://youtube.com/playlist?list=PLKM3Q3j59zpH7O0VQGFCvmW5ISlM0tys6)
 
