@@ -1,9 +1,12 @@
 # Pong AI
 ### An rallying AI that plays Pong
+##### By Sam Reiter, Adie Guo, and Sam Robinson
+
+
 ![](https://media.giphy.com/media/HQlb1YUv0GtmyEVCqy/giphy.gif)
+
 [Full video](https://drive.google.com/file/d/1jogvmUo2OPmf_dEu7pDzd8V9-vyO_2n_/view?usp=sharing)
 
-##### By Sam Reiter, Adie Guo, and Sam Robinson
 
 
 ## Dependencies
