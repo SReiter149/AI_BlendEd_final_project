@@ -55,6 +55,8 @@ This project was coded without machine learning libraries. Here is a playlist of
 [![AI VIDEOS](https://i.ytimg.com/vi/IHZwWFHWa-w/maxresdefault.jpg)](https://youtube.com/playlist?list=PLKM3Q3j59zpH7O0VQGFCvmW5ISlM0tys6)
 
 ## Next Steps
+- make the bias work
+- train after each move rather than each game
 - Integrate a proper reinforcement-learning algorithm.
 - Add a second AI to play against the first.
 - Use GPU acceleration.
