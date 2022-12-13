@@ -5,6 +5,7 @@
 import pygame
 import sys
 import time
+import numpy as np
 
 class Paddle:
     #class for the paddle
@@ -86,8 +87,9 @@ class game:
         #setting up constances
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
-        self.SPEED = [2, 2]
-        self.FPS = (1 / 60) * 10**9
+        # self.SPEED = [2, 2]
+        # a big number
+        self.FPS = (1 / 144) * 10**9
         self.PADDLE_SPEED = 2
         self.PADDLE_SIZE = [2, 56]
         self.PADDLE_OFFSET = 30
@@ -242,10 +244,16 @@ class game:
         self.GAME_OVER = False
         self.BALL_START = [self.SCREEN_WIDTH / 2, self.SCREEN_HEIGHT / 2]
         self.BALL_SIZE = 7
-        self.SPEED = [2, 2]
-        self.ball = Ball(self.screen, start_position=self.BALL_START, size=self.BALL_SIZE)
-        self.paddle1 = Paddle(self.screen, start_position=[self.PADDLE_OFFSET, 0], paddle_size=self.PADDLE_SIZE)
-        self.scores = [0, 0] 
+        self.SPEED = [np.random.choice([-2,2]), np.random.choice([-2,2])]
+        self.ball = Ball(
+            self.screen, start_position=self.BALL_START, size=self.BALL_SIZE, start_direction=self.SPEED
+        )
+        self.paddle1 = Paddle(
+            self.screen,
+            start_position=[self.PADDLE_OFFSET, self.SCREEN_HEIGHT / 2],
+            paddle_size=self.PADDLE_SIZE,
+        )
+        self.scores = [0, 0]
 
 def main():
     #main logic to allow the human to play the game

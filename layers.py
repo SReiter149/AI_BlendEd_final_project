@@ -36,10 +36,17 @@ class FC_Layer:
         self.output = self.activation(self.output)
         return self.output
 
+<<<<<<< Updated upstream
     def back_prop(self, dloss, LR=0.01):
         #setting up the shapes of the matrixes for back_prop
         self.input = self.input.reshape(-1,1)
         dloss = np.array(dloss).reshape(-1,1)
+=======
+    def back_prop(self, dloss, LR=0.000003):
+        # setting up the shapes of the matrixes for back_prop
+        self.input = self.input.reshape(-1, 1)
+        dloss = np.array(dloss).reshape(-1, 1)
+>>>>>>> Stashed changes
 
         #back_prop through activation layer
         dloss = np.multiply(dloss, self.activation(self.output, deriv = True).reshape(-1,1))

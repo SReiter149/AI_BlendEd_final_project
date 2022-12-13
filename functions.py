@@ -1,7 +1,11 @@
 #import nessessary files
 import numpy as np
+<<<<<<< Updated upstream
 
 #activation function of choice
+=======
+# activation function of choice
+>>>>>>> Stashed changes
 def tanh(x, deriv=False):
     #function of choice because it reduces the magnitude of the numbers whiles preserving their sign
     if deriv == True:
@@ -22,11 +26,17 @@ def pong_loss(state, move):
     #get the sign of the actual move
     move = np.sign(move)
 
+<<<<<<< Updated upstream
     #I realize this isn't the exact integral of dloss but its close enough and fine for visualization purposes
     loss = 2 * error ** 2
+=======
+    # I realize this isn't the exact integral of dloss but its close enough and fine for visualization purposes
+    loss = (state[1] - state[3])
+>>>>>>> Stashed changes
 
     #our best guess at a good dloss
     if expected == move:
+<<<<<<< Updated upstream
         #reward on correct move
         dloss = error
     else:
@@ -36,6 +46,16 @@ def pong_loss(state, move):
     #return dloss as a matrix
     dloss = np.array([dloss])
 
+=======
+        # reward on correct move
+        dloss = error * 0.01
+    else:
+        # punishment on incorrect move
+        dloss = error * -0.01
+
+    # return dloss as a matrix
+    dloss = np.array(dloss)
+>>>>>>> Stashed changes
     return loss, dloss
 
 #other activation functions we tried
