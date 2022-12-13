@@ -25,9 +25,9 @@ With pacman:
 sudo pacman -S python-numpy python-pandas python-matplotlib python-pygame
 ```
 With conda
-'''bash
+```bash
 conda install --Dependencies
-'''
+```
 
 
 
