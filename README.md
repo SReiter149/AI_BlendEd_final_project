@@ -20,10 +20,16 @@ With pip:
 ```bash
 python -m pip install numpy pandas matplotlib pygame
 ```
-pacman:
+With pacman:
 ```bash
 sudo pacman -S python-numpy python-pandas python-matplotlib python-pygame
 ```
+With conda
+'''bash
+conda install --Dependencies
+'''
+
+
 
 ## Usage
 ##### Run
