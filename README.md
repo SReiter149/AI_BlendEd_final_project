@@ -54,6 +54,9 @@ Our network of layers
 ##### pong.py
 Code for the game pong
 ##### train.py
+run to train the model
+##### Dependencies
+dependencies and version numbers we used
 
 ## References Used
 This project was coded without machine learning libraries. Here is a playlist of videos used to achieve this.
